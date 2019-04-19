@@ -49,7 +49,7 @@ def main():
     url1 可以反复登录
     url2 可以反复登录
     '''
-    test.get_page(url1)
+    test.get_page(url4)
 
 
 main()
