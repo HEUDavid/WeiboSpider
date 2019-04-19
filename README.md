@@ -1,6 +1,7 @@
 ## 微博爬虫
 
 基于 requests 实现, 可以获取 cookie 并以 json 格式保存到本地.
+
 利用获取的 cookie 可以登录:
 > * https://m.weibo.cn/ # 触屏版
 > * https://weibo.cn/ # 旧版
@@ -9,6 +10,7 @@
 
 ### 1. WeiboLogin.py
 获取 cookie 并以 json 的格式保存到本地.
+
 **怎么使用**
 ```python
 def main():
@@ -35,8 +37,11 @@ def main():
 爬取一条微博下的所有评论
 
 ### 6. 环境
+```
 Python3
 requests
+```
 
-*作者: David
-2019 年 04 月 19 日*    
+* 作者: David *
+
+* 2019 年 04 月 19 日 *
