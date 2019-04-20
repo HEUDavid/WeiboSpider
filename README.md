@@ -8,10 +8,10 @@
 > * https://weibo.com/ # PC 版
 > * https://s.weibo.com/ # PC 版 高级搜索
 
-### 1. WeiboLogin.py
+### 1. [WeiboLogin.py](https://github.com/HEUDavid/WeiboSpider/blob/master/WeiboLogin.py)
 获取 cookie 并以 json 的格式保存到本地.
 
-**怎么使用**
+**怎么使用:**
 ```python
 def main():
     username = '18846426742' # 用户名
@@ -24,7 +24,7 @@ def main():
     save(cookie_name, data)
 ```
 
-### 2. WeiboTest.py
+### 2. [WeiboTest.py](https://github.com/HEUDavid/WeiboSpider/blob/master/CookieTest.py)
 测试 cookie 能否登录到某个 url.
 
 ### 3. SpiderKeyword.py
@@ -34,7 +34,7 @@ def main():
 爬取一个用户的全部微博.
 
 ### 5. SpiderComment.py
-爬取一条微博下的所有评论
+爬取一条微博下的所有评论.
 
 ### 6. 环境
 ```
@@ -43,5 +43,4 @@ requests
 ```
 
 *作者: David*
-
 *2019 年 04 月 19 日*
