@@ -9,7 +9,6 @@ import time
 import rsa
 import binascii
 import random
-import json
 import re
 import json
 
@@ -22,9 +21,7 @@ class WeiboLogin:
 
         self.Session = requests.Session()
         self.Session.headers = {
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36'
-        }
-
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36'}
 
     def get_su(self):
         '''
@@ -39,7 +36,6 @@ class WeiboLogin:
         print('处理后的账户:', su)
         return su
 
-
     def get_server_data(self, su):
         '''
         预登陆获得 servertime, nonce, pubkey, rsakv
@@ -48,24 +44,23 @@ class WeiboLogin:
         url_str2 = '&rsakt=mod&checkpin=1&client=ssologin.js(v1.4.19)&_='
         pre_url = url_str1 + su + url_str2 + str(int(time.time() * 1000))
         pre_data_res = self.Session.get(pre_url)
-        sever_data = eval(pre_data_res.content.decode('utf-8').replace('sinaSSOController.preloginCallBack', ''))
+        sever_data = eval(pre_data_res.content.decode(
+            'utf-8').replace('sinaSSOController.preloginCallBack', ''))
         print('sever_data:', sever_data)
         return sever_data
-
 
     def get_password(self, servertime, nonce, pubkey):
         '''
         对密码进行 RSA 加密
         '''
-        rsaPublickey = int(pubkey, 16) # 16进制 string 转化为 int
-        key = rsa.PublicKey(rsaPublickey, 65537) # 创建公钥
+        rsaPublickey = int(pubkey, 16)  # 16进制 string 转化为 int
+        key = rsa.PublicKey(rsaPublickey, 65537)  # 创建公钥
         message = str(servertime) + '\t' + nonce + '\n' + self.password
         message = message.encode('utf-8')
-        passwd = rsa.encrypt(message, key) # 加密
-        passwd = binascii.b2a_hex(passwd) # 将加密信息转换为16进制
+        passwd = rsa.encrypt(message, key)  # 加密
+        passwd = binascii.b2a_hex(passwd)  # 将加密信息转换为16进制
         print('处理后的密码:', passwd)
         return passwd
-
 
     def get_png(self, pcid):
         '''
@@ -73,7 +68,8 @@ class WeiboLogin:
         有的账号一直不需要验证码?
         '''
         url = 'https://login.sina.com.cn/cgi/pin.php?r='
-        png_url = url + str(int(random.random() * 100000000)) + '&s=0&p=' + pcid
+        png_url = url + str(int(random.random() * 100000000)
+                            ) + '&s=0&p=' + pcid
         png_page = self.Session.get(png_url)
         with open('pin.png', 'wb') as f:
             f.write(png_page.content)
@@ -82,11 +78,13 @@ class WeiboLogin:
         verification_code = input('请输入验证码:')
         return verification_code
 
-
     def get_cookie(self):
         su = self.get_su()
         server_data = self.get_server_data(su)
-        passwd = self.get_password(server_data['servertime'], server_data['nonce'],server_data['pubkey'])
+        passwd = self.get_password(
+            server_data['servertime'],
+            server_data['nonce'],
+            server_data['pubkey'])
 
         # login.php?client=ssologin.js(v1.4.19) 找到 POST 的表单数据
         Form_Data = {
@@ -97,18 +95,18 @@ class WeiboLogin:
             'useticket': '1',
             'pagerefer': 'https://passport.weibo.com',
             'vsnf': '1',
-            'su': su, # 处理后的账号, 如 MTg4NDY0MjY3NDI=
+            'su': su,  # 处理后的账号, 如 MTg4NDY0MjY3NDI=
             'service': 'miniblog',
-            'servertime': server_data['servertime'], # 如 1555504878
-            'nonce': server_data['nonce'], # 如 JU713C
+            'servertime': server_data['servertime'],  # 如 1555504878
+            'nonce': server_data['nonce'],  # 如 JU713C
             'pwencode': 'rsa2',
-            'rsakv': server_data['rsakv'], # 如 1330428213
-            'sp': passwd, # 处理后的密码
+            'rsakv': server_data['rsakv'],  # 如 1330428213
+            'sp': passwd,  # 处理后的密码
             'sr': '1366*768',
             'encoding': 'UTF-8',
             'prelt': '243',
             'url': 'https://weibo.com/ajaxlogin.php?framelogin=1&callback=parent.sinaSSOController.feedBackUrlCallBack',
-            'returntype': 'TEXT' # 这里是 TEXT, META 不可以
+            'returntype': 'TEXT'  # 这里是 TEXT, META 不可以
         }
 
         login_url = 'https://login.sina.com.cn/sso/login.php?client=ssologin.js(v1.4.19)&_'
@@ -141,20 +139,24 @@ class WeiboLogin:
         jump_url = 'https://passport.weibo.com/wbsso/login'
 
         jump_login = self.Session.get(jump_url, params=jump_ticket_params)
-        jump_login_data = json.loads(re.search(r'{.*}', jump_login.text).group(0))
+        jump_login_data = json.loads(
+            re.search(r'{.*}', jump_login.text).group(0))
         print('登录状态:', jump_login_data)
-        if jump_login_data['result'] == False:
+        if not jump_login_data['result']:
             # 登录失败 退出
             return None
-        
+
         # PC 版 个人主页
-        weibo_com_home = 'https://weibo.com/u/'+ jump_login_data['userinfo']['uniqueid']
+        weibo_com_home = 'https://weibo.com/u/' + \
+            jump_login_data['userinfo']['uniqueid']
         weibo_com_home_page = self.Session.get(weibo_com_home)
         # print('weibo_com_home_page.cookies', weibo_com_home_page.cookies)
         # print(weibo_com_home_page.text[:1500:])
         weibo_com_home_title_pat = r'<title>(.*)</title>'
-        weibo_com_home_title = re.findall(weibo_com_home_title_pat, weibo_com_home_page.text)[0]
-        print('PC 版个人主页:', weibo_com_home_title) # PC 版登录成功
+        weibo_com_home_title = re.findall(
+            weibo_com_home_title_pat,
+            weibo_com_home_page.text)[0]
+        print('PC 版个人主页:', weibo_com_home_title)  # PC 版登录成功
 
         # PC 版 首页
         weibo_com = 'https://weibo.com'
@@ -183,7 +185,7 @@ class WeiboLogin:
         mhtml = self.Session.get(murl, params=mParams)
 
         mpa = r'replace\((.*?)\);'
-        mres = re.findall(mpa, mhtml.text)[0] # 从新浪通行证中找到跳转链接
+        mres = re.findall(mpa, mhtml.text)[0]  # 从新浪通行证中找到跳转链接
 
         mlogin = self.Session.get(eval(mres))
 
@@ -194,8 +196,8 @@ class WeiboLogin:
         uid_start = m_weibo_com_page.text.index('uid:')
 
         print('移动端登录状态')
-        print(m_weibo_com_page.text[login_start:login_start+13:])
-        print(m_weibo_com_page.text[uid_start:uid_start+17:])
+        print(m_weibo_com_page.text[login_start:login_start + 13:])
+        print(m_weibo_com_page.text[uid_start:uid_start + 17:])
 
         # 旧版
         weibo_cn = 'https://weibo.cn'
@@ -210,13 +212,14 @@ def save(name, data):
         json.dump(data, f)
         print(path, '保存成功')
 
+
 def main():
-    username = '18846426742' # 用户名
-    password = 'mdavid.cn' # 密码
+    username = '18846426742'  # 用户名
+    password = 'mdavid.cn'  # 密码
     login = WeiboLogin(username, password)
     cookies = login.get_cookie()
 
-    cookie_name = 'cookie_' + username # 保存 cookie 的文件名称
+    cookie_name = 'cookie_' + username  # 保存 cookie 的文件名称
     data = cookies.get_dict()
     save(cookie_name, data)
 

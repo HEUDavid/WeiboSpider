@@ -5,26 +5,24 @@
 import requests
 import json
 
+
 class CookieTest:
 
     def __init__(self, cookie_path):
         self.cookie_path = cookie_path
         self.Session = requests.Session()
         self.Session.headers = {
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36'
-        }
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36'}
         self.Session.cookies.update(self.load_cookie())
-
 
     def load_cookie(self):
         try:
             with open(self.cookie_path, 'r') as f:
                 data = json.load(f)
             return data
-        except:
+        except BaseException:
             print(self.cookie_path, '未找到')
             return None
-
 
     def get_page(self, url):
         html = self.Session.get(url)
@@ -35,10 +33,10 @@ def main():
     cookie_path = 'cookie_18846426742.json'
     test = CookieTest(cookie_path)
 
-    url1 = 'https://m.weibo.cn/' # 触屏版
-    url2 = 'https://weibo.cn/' # 旧版
-    url3 = 'https://weibo.com/' # PC 版
-    url4 = 'https://s.weibo.com/'# PC 版 高级搜索
+    url1 = 'https://m.weibo.cn/'  # 触屏版
+    url2 = 'https://weibo.cn/'  # 旧版
+    url3 = 'https://weibo.com/'  # PC 版
+    url4 = 'https://s.weibo.com/'  # PC 版 高级搜索
 
     '''
     经过简单的测试
