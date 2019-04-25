@@ -34,7 +34,7 @@ def main():
 
 ### 3. [WeiboSpider_Keyword.py](https://github.com/HEUDavid/WeiboSpider/blob/master/WeiboSpider_Keyword.py)
 
-![WeiboSpider_Keyword.png]()
+![WeiboSpider_Keyword.png]("https://github.com/HEUDavid/WeiboSpider/blob/master/pictures/WeiboSpider_Keyword.png")
 
 通过关键字搜索, 爬取关键字下的所有微博.
 
