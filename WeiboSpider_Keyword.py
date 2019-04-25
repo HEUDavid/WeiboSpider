@@ -1,4 +1,4 @@
-# 微博数据抓取
+# 微博数据抓取 基于关键词
 # 作者: David
 # Github: https://github.com/HEUDavid/WeiboSpider
 
@@ -118,9 +118,8 @@ class WeiboSpider:
                 m, d, H, M = re.findall(r'\d+', s)
                 date = datetime.datetime(today.year, int(m), int(
                     d), int(H), int(M)).strftime('%Y-%m-%d %H:%M')
-                date = s
         except BaseException:
-            print(s)
+            print('时间格式异常', s)
             date = s
 
         return date
@@ -178,8 +177,8 @@ def search():
     生成一个搜索实例
     '''
     keyword = '大卫'  # 搜索关键字
-    startTime = '2019-04-24'
-    endTime = '2019-04-25'
+    startTime = '2019-04-22'
+    endTime = '2019-04-23'
     # 微博默认按小时搜索, 我们可以控制时间范围增加查询精度
     timescope = f'custom:{startTime}-0:{endTime}-23'
     prov = '11'  # 省和直辖市
@@ -191,7 +190,7 @@ def search():
 
 def main():
     search_obj = search()
-    session_obj = CookieTest('cookie_18846426742.json')  # cookies 路径
+    session_obj = CookieTest('cookie_18846426742.json')  # cookie 路径
 
     url = search_obj.get_url(1)
     html = session_obj.get_page(url)
@@ -222,11 +221,13 @@ def main():
                 data.extend(results)
             time.sleep(random.randint(5, 10))
         print(f'第 {i} 页抓取结束, 共 {totalPage} 页.')
-
+    for i in data:
+        print(i)
     df = pd.DataFrame(data)
     savePath = search_obj.keyword + '_' + \
         search_obj.timescope + '_' + search_obj.region + '.xlsx'
     df.to_excel(savePath)
+    print(savePath, '保存成功')
 
 
 main()

@@ -51,7 +51,7 @@ class WeiboLogin:
 
     def get_password(self, servertime, nonce, pubkey):
         '''
-        对密码进行 RSA 加密
+        对密码进行 rsa 加密
         '''
         rsaPublickey = int(pubkey, 16)  # 16进制 string 转化为 int
         key = rsa.PublicKey(rsaPublickey, 65537)  # 创建公钥
@@ -64,7 +64,7 @@ class WeiboLogin:
 
     def get_png(self, pcid):
         '''
-        获取验证码, 如何识别验证码? 人工识别
+        获取验证码, 如何识别验证码? 接入打码平台
         有的账号一直不需要验证码?
         '''
         url = 'https://login.sina.com.cn/cgi/pin.php?r='
