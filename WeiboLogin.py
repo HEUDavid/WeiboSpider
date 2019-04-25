@@ -1,4 +1,4 @@
-# 微博登录
+# 微博模拟登录
 # 作者: David
 # Github: https://github.com/HEUDavid/WeiboSpider
 

@@ -2,6 +2,7 @@
 # 作者: David
 # Github: https://github.com/HEUDavid/WeiboSpider
 
+
 import requests
 import json
 
@@ -24,9 +25,17 @@ class CookieTest:
             print(self.cookie_path, '未找到')
             return None
 
-    def get_page(self, url):
+    def get_page(self, url='https://s.weibo.com/'):
         html = self.Session.get(url)
-        print(html.text)
+        return html.text.replace('\u200b', '')
+
+    def is_OK(self, html):
+        # PC 版 没有问题
+        if '\'islogin\':1' in html:
+            return True
+        # 触屏版 旧版 还未写 验证
+        else:
+            return False
 
 
 def main():
@@ -47,7 +56,8 @@ def main():
     url1 可以反复登录
     url2 可以反复登录
     '''
-    test.get_page(url4)
+    html = test.get_page(url4)
+    print(test.is_OK(html))
 
 
-main()
+# main()
