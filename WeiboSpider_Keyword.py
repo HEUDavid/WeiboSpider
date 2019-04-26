@@ -28,61 +28,63 @@ class WeiboSpider:
             return res
         else:
             for i in soup.select('div[action-type="feed_list_item"]'):
-                blog = {}
-                blog['博主昵称'] = i.select('.name')[0].get('nick-name')
-                blog['博主主页'] = 'https:' + i.select('.name')[0].get('href')
+                try:
+                    blog = {}
+                    blog['博主昵称'] = i.select('.name')[0].get('nick-name')
+                    blog['博主主页'] = 'https:' + i.select('.name')[0].get('href')
 
-                weibotext = ''
-                if i.select(
-                        'div[class="content"] p[node-type="feed_list_content_full"]'):
-                    weibotext = i.select('div[class="content"] p[node-type="feed_list_content_full"]')[
-                        0].text.replace('收起全文d', '').strip()
-                if weibotext == '':
+                    weibotext = ''
                     if i.select(
-                            'div[class="content"] p[node-type="feed_list_content"]'):
-                        weibotext = i.select(
-                            'div[class="content"] p[node-type="feed_list_content"]')[0].text.strip()
+                            'div[class="content"] p[node-type="feed_list_content_full"]'):
+                        weibotext = i.select('div[class="content"] p[node-type="feed_list_content_full"]')[
+                            0].text.replace('收起全文d', '').strip()
+                    if weibotext == '':
+                        if i.select(
+                                'div[class="content"] p[node-type="feed_list_content"]'):
+                            weibotext = i.select(
+                                'div[class="content"] p[node-type="feed_list_content"]')[0].text.strip()
+                    blog['微博内容'] = weibotext
 
-                blog['微博内容'] = weibotext
+                    blog['发布时间'] = self.get_datetime(
+                        i.select('div[class="content"] p[class="from"] a')[0].get_text().strip())
 
-                blog['发布时间'] = self.get_datetime(
-                    i.select('div[class="content"] p[class="from"] a')[0].get_text().strip())
+                    blog['微博地址'] = 'https:' + \
+                        i.select('div[class="content"] p[class="from"] a')[0].get('href')
 
-                blog['微博地址'] = 'https:' + \
-                    i.select('div[class="content"] p[class="from"] a')[0].get('href')
+                    try:
+                        blog['微博来源'] = i.select('div[class="content"] p[class="from"] a')[
+                            1].get_text()
+                    except BaseException:
+                        blog['微博来源'] = ''
 
-                try:
-                    blog['微博来源'] = i.select('div[class="content"] p[class="from"] a')[
-                        1].get_text()
+                    try:
+                        sd = i.select('.card-act ul li')
+                    except Exception:
+                        print('sd not found...')
+                        print('Something wrong with')
+                    try:
+                        blog['转发'] = 0 if sd[1].text.replace(
+                            '转发', '').strip() == '' else int(
+                            sd[1].text.replace(
+                                '转发', '').strip())
+                    except BaseException:
+                        blog['转发'] = 0
+                    try:
+                        blog['评论'] = 0 if sd[2].text.replace(
+                            '评论', '').strip() == '' else int(
+                            sd[2].text.replace(
+                                '评论', '').strip())
+                    except BaseException:
+                        blog['评论'] = 0
+                    try:
+                        blog['赞'] = 0 if sd[3].select('em')[0].get_text(
+                        ) == '' else int(sd[3].select('em')[0].get_text())
+                    except BaseException:
+                        blog['赞'] = 0
+                    res.append(blog)
+
                 except BaseException:
-                    blog['微博来源'] = ''
-
-                try:
-                    sd = i.select('.card-act ul li')
-                except Exception:
-                    print('sd not found...')
-                    print('Something wrong with')
-                try:
-                    blog['转发'] = 0 if sd[1].text.replace(
-                        '转发', '').strip() == '' else int(
-                        sd[1].text.replace(
-                            '转发', '').strip())
-                except BaseException:
-                    blog['转发'] = 0
-                try:
-                    blog['评论'] = 0 if sd[2].text.replace(
-                        '评论', '').strip() == '' else int(
-                        sd[2].text.replace(
-                            '评论', '').strip())
-                except BaseException:
-                    blog['评论'] = 0
-                try:
-                    blog['赞'] = 0 if sd[3].select('em')[0].get_text(
-                    ) == '' else int(sd[3].select('em')[0].get_text())
-                except BaseException:
-                    blog['赞'] = 0
-
-                res.append(blog)
+                    print('忽略:', i.get_text().replace('\n', '').strip())
             return res
 
     def get_datetime(self, s):
@@ -176,9 +178,9 @@ def search():
     '''
     生成一个搜索实例
     '''
-    keyword = '大卫'  # 搜索关键字
-    startTime = '2019-04-22'
-    endTime = '2019-04-23'
+    keyword = '转基因'  # 搜索关键字
+    startTime = '2019-03-01'
+    endTime = '2019-04-25'
     # 微博默认按小时搜索, 我们可以控制时间范围增加查询精度
     timescope = f'custom:{startTime}-0:{endTime}-23'
     prov = '11'  # 省和直辖市
@@ -197,7 +199,7 @@ def main():
     totalPage = search_obj.get_totalPage(html)
 
     print(f'共有 {totalPage} 页')
-    # totalPage = 2
+    totalPage = 2
 
     data = []
     for i in range(1, totalPage + 1):
@@ -212,7 +214,8 @@ def main():
             time.sleep(random.randint(5, 10))
         except BaseException:
             print('出错')
-            time.sleep(120)
+            print(url)
+            time.sleep(20)
             print('#' * 10 + f'第 {i} 页' + '#' * 10)
             html = session_obj.get_page(url)
             spider = WeiboSpider(html)

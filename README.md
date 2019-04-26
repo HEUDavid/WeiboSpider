@@ -7,10 +7,10 @@
 基于 BeautifulSoup 实现内容采集, 通过 pandas 保存 excel 到本地.
 
 利用获取的 cookie 可以登录:
-> * https://m.weibo.cn/ # 触屏版
-> * https://weibo.cn/ # 旧版
-> * https://weibo.com/ # PC 版
-> * https://s.weibo.com/ # PC 版 高级搜索
+> * https://m.weibo.cn/  # 触屏版
+> * https://weibo.cn/  # 旧版
+> * https://weibo.com/  # PC 版
+> * https://s.weibo.com/  # PC 版 高级搜索
 
 ### 1. [WeiboLogin.py](https://github.com/HEUDavid/WeiboSpider/blob/master/WeiboLogin.py)
 
@@ -72,7 +72,7 @@ def search():
 控制爬虫休眠时间, 避免账号被封.
 如何控制采集精度:
     分地区采集, 设置 region 参数
-    分时段采集, 一般地, 一次搜索微博会返回 50 页, 每页20条微博, 我们可以把时间切成多个, 分别采集, 得到更丰富的数据
+    分时段采集, 一般地, 一次搜索微博会返回 50 页, 每页 20 条微博, 我们可以把时间切成多个, 分别采集, 得到更丰富的数据
 ```
 
 ### 4. WeiboSpider_User.py

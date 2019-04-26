@@ -4,9 +4,9 @@
     <list default="true" id="f48e755b-30c8-4ef0-bc3f-a456ea49e040" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WeiboLogin.py" beforeDir="false" afterPath="$PROJECT_DIR$/WeiboLogin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WeiboSpider_Keyword.py" beforeDir="false" afterPath="$PROJECT_DIR$/WeiboSpider_Keyword.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/刘强东_custom:2019-04-20-0:2019-04-25-23_custom:11:1000.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cookie_18846426742.json" beforeDir="false" afterPath="$PROJECT_DIR$/cookie_18846426742.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,11 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WeiboLogin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="214" lean-forward="true" selection-start-line="214" selection-end-line="214" />
+            <state relative-caret-position="601">
+              <caret line="214" selection-start-line="214" selection-end-line="214" />
               <folding>
                 <element signature="e#286#564#0" />
                 <element signature="e#596#977#0" />
@@ -34,16 +34,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WeiboSpider_Keyword.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="121">
-              <caret line="174" selection-start-line="174" selection-end-line="187" selection-end-column="21" />
-              <folding>
-                <element signature="e#279#295#0" />
-                <element signature="e#3088#4343#0" />
-                <element signature="e#4364#4520#1" />
-                <element signature="e#4694#4934#0" />
-                <element signature="e#4973#5181#0" />
-                <element signature="e#5226#5527#0" />
-              </folding>
+            <state relative-caret-position="-11">
+              <caret line="83" column="26" selection-start-line="83" selection-start-column="26" selection-end-line="83" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/requirements.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="16" selection-start-column="16" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -51,8 +52,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CookieTest.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="464">
-              <caret line="58" selection-start-line="58" selection-end-line="59" selection-end-column="27" />
+            <state relative-caret-position="232">
+              <caret line="47" column="46" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="46" />
               <folding>
                 <element signature="n#!!doc" />
               </folding>
@@ -64,8 +65,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="203">
-                <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+              <first_editor relative-caret-position="409">
+                <caret line="97" column="16" selection-start-line="97" selection-start-column="16" selection-end-line="97" selection-end-column="16" />
               </first_editor>
               <second_editor />
             </state>
@@ -89,9 +90,11 @@
       <find>urllib</find>
       <find>WeiboSpider</find>
       <find>&quot;</find>
+      <find />
     </findStrings>
     <replaceStrings>
       <replace>'</replace>
+      <replace />
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -105,9 +108,10 @@
         <option value="$PROJECT_DIR$/CookieTest.py" />
         <option value="$PROJECT_DIR$/WeiboDownload.py" />
         <option value="$PROJECT_DIR$/WeiboSpider.py" />
-        <option value="$PROJECT_DIR$/WeiboSpider_Keyword.py" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/WeiboLogin.py" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/WeiboSpider_Keyword.py" />
+        <option value="$PROJECT_DIR$/requirements.txt" />
       </list>
     </option>
   </component>
@@ -275,6 +279,7 @@
       <workItem from="1556174746941" duration="12297000" />
       <workItem from="1556187243287" duration="5673000" />
       <workItem from="1556193188733" duration="4744000" />
+      <workItem from="1556237809160" duration="2659000" />
     </task>
     <task id="LOCAL-00001" summary="大卫哥也是个懂代码规范的人0_o">
       <created>1556113158379</created>
@@ -308,17 +313,17 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54261000" />
+    <option name="totallyTimeSpent" value="56920000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.4080492" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20905533" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.24521935" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.40494937" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39932507" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -327,7 +332,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3289183" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.3295838" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.62429696" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -387,8 +392,8 @@
     <option name="LAST_COMMIT_MESSAGE" value="增加图片" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/WeiboSpider$WeiboLogin.coverage" NAME="WeiboLogin Coverage Results" MODIFIED="1556191730397" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/WeiboSpider$WeiboDownload.coverage" NAME="WeiboDownload Coverage Results" MODIFIED="1556200200987" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/WeiboSpider$WeiboLogin.coverage" NAME="WeiboLogin Coverage Results" MODIFIED="1556237941973" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/WeiboSpider$WeiboDownload.coverage" NAME="WeiboDownload Coverage Results" MODIFIED="1556240144766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/WeiboSpider$4_weibo_spider_keyword_by_hour.coverage" NAME="4-weibo-spider-keyword-by-hour Coverage Results" MODIFIED="1556115498253" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../../Python/weibo" />
     <SUITE FILE_PATH="coverage/WeiboSpider$CookieTest.coverage" NAME="CookieTest Coverage Results" MODIFIED="1556165054601" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
@@ -416,10 +421,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/WeiboLogin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="601">
+          <caret line="214" selection-start-line="214" selection-end-line="214" />
+          <folding>
+            <element signature="e#286#564#0" />
+            <element signature="e#596#977#0" />
+            <element signature="e#1022#1599#0" />
+            <element signature="e#1664#2095#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/CookieTest.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="464">
-          <caret line="58" selection-start-line="58" selection-end-line="59" selection-end-column="27" />
+        <state relative-caret-position="232">
+          <caret line="47" column="46" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="46" />
           <folding>
             <element signature="n#!!doc" />
           </folding>
@@ -429,38 +447,27 @@
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="203">
-            <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+          <first_editor relative-caret-position="409">
+            <caret line="97" column="16" selection-start-line="97" selection-start-column="16" selection-end-line="97" selection-end-column="16" />
           </first_editor>
           <second_editor />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.fuse_hidden000001ef00000001">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/WeiboSpider_Keyword.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="121">
-          <caret line="174" selection-start-line="174" selection-end-line="187" selection-end-column="21" />
-          <folding>
-            <element signature="e#279#295#0" />
-            <element signature="e#3088#4343#0" />
-            <element signature="e#4364#4520#1" />
-            <element signature="e#4694#4934#0" />
-            <element signature="e#4973#5181#0" />
-            <element signature="e#5226#5527#0" />
-          </folding>
+        <state relative-caret-position="-11">
+          <caret line="83" column="26" selection-start-line="83" selection-start-column="26" selection-end-line="83" selection-end-column="26" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WeiboLogin.py">
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="214" lean-forward="true" selection-start-line="214" selection-end-line="214" />
-          <folding>
-            <element signature="e#286#564#0" />
-            <element signature="e#596#977#0" />
-            <element signature="e#1022#1599#0" />
-            <element signature="e#1664#2095#0" />
-          </folding>
+        <state>
+          <caret column="16" selection-start-column="16" selection-end-column="16" />
         </state>
       </provider>
     </entry>
