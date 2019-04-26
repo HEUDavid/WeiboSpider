@@ -199,7 +199,7 @@ def main():
     totalPage = search_obj.get_totalPage(html)
 
     print(f'共有 {totalPage} 页')
-    totalPage = 2
+    # totalPage = 2
 
     data = []
     for i in range(1, totalPage + 1):
@@ -215,8 +215,8 @@ def main():
         except BaseException:
             print('出错')
             print(url)
+            print('重试')
             time.sleep(20)
-            print('#' * 10 + f'第 {i} 页' + '#' * 10)
             html = session_obj.get_page(url)
             spider = WeiboSpider(html)
             results = spider.get_results()
@@ -224,8 +224,8 @@ def main():
                 data.extend(results)
             time.sleep(random.randint(5, 10))
         print(f'第 {i} 页抓取结束, 共 {totalPage} 页.')
-    for i in data:
-        print(i)
+    # for i in data:
+    #     print(i)
     df = pd.DataFrame(data)
     savePath = search_obj.keyword + '_' + \
         search_obj.timescope + '_' + search_obj.region + '.xlsx'
