@@ -183,7 +183,7 @@ def search():
     endTime = '2019-04-25'
     # 微博默认按小时搜索, 我们可以控制时间范围增加查询精度
     timescope = f'custom:{startTime}-0:{endTime}-23'
-    prov = '11'  # 省和直辖市
+    prov = '31'  # 省和直辖市
     city = '1000'  # 城市
     region = f'custom:{prov}:{city}'
     search_obj = Search(keyword, timescope, region)
@@ -199,7 +199,7 @@ def main():
     totalPage = search_obj.get_totalPage(html)
 
     print(f'共有 {totalPage} 页')
-    # totalPage = 2
+    # totalPage = 3
 
     data = []
     for i in range(1, totalPage + 1):
@@ -225,7 +225,7 @@ def main():
             time.sleep(random.randint(5, 10))
         print(f'第 {i} 页抓取结束, 共 {totalPage} 页.')
     # for i in data:
-    #     print(i)
+        # print(i)
     df = pd.DataFrame(data)
     savePath = search_obj.keyword + '_' + \
         search_obj.timescope + '_' + search_obj.region + '.xlsx'

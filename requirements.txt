@@ -1,4 +1,0 @@
-requests>=2.20.0
-rsa==4.0
-pandas==0.24.2
-beautifulsoup4==4.7.1
