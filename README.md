@@ -20,9 +20,7 @@
 
 ```python
 def main():
-    ‘’‘
-    请使用自己的账号
-    ’‘’
+    # 请使用自己的账号
     username = '18846426742'  # 用户名
     password = 'mdavid.cn'  # 密码
     login = WeiboLogin(username, password)
