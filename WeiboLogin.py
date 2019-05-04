@@ -65,7 +65,7 @@ class WeiboLogin:
     def get_png(self, pcid):
         '''
         获取验证码, 如何识别验证码? 接入打码平台
-        有的账号一直不需要验证码?
+        有的账号因为设置一直不需要验证码!
         '''
         url = 'https://login.sina.com.cn/cgi/pin.php?r='
         png_url = url + str(int(random.random() * 100000000)
@@ -117,7 +117,7 @@ class WeiboLogin:
             # 不输入验证码
             login_page = self.Session.post(login_url, data=Form_Data)
             ticket_js = login_page.json()
-        except Exception as e:
+        except BaseException:
             # 输入验证码
             Form_Data['door'] = self.get_png(server_data['pcid'])
             login_page = self.Session.post(login_url, data=Form_Data)

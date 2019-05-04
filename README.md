@@ -20,6 +20,9 @@
 
 ```python
 def main():
+    ‘’‘
+    请使用自己的账号
+    ’‘’
     username = '18846426742'  # 用户名
     password = 'mdavid.cn'  # 密码
     login = WeiboLogin(username, password)
@@ -45,7 +48,7 @@ print(test.is_OK(html))
 
 ![WeiboSpider_Keyword.png](https://github.com/HEUDavid/WeiboSpider/blob/master/pictures/WeiboSpider_Keyword.png)
 
-通过关键字搜索, 爬取所有的结果.
+主要使用[微博搜索接口](https://s.weibo.com/), 通过关键字搜索, 爬取所有的结果.
 
 **怎么使用:**
 
@@ -91,6 +94,7 @@ requests
 rsa
 pandas
 beautifulsoup4
+openpyxl
 ```
 
 *作者: David*

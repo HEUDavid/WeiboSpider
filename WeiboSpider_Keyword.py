@@ -49,7 +49,8 @@ class WeiboSpider:
                         i.select('div[class="content"] p[class="from"] a')[0].get_text().strip())
 
                     blog['微博地址'] = 'https:' + \
-                        i.select('div[class="content"] p[class="from"] a')[0].get('href')
+                        i.select('div[class="content"] p[class="from"] a')[
+                        0].get('href')
 
                     try:
                         blog['微博来源'] = i.select('div[class="content"] p[class="from"] a')[
@@ -116,7 +117,12 @@ class WeiboSpider:
                     today.day,
                     today.hour,
                     today.minute).strftime('%Y-%m-%d %H:%M')
+            elif '年' in s:
+                y, m, d, H, M = re.findall(r'\d+', s)
+                date = datetime.datetime(int(y), int(m), int(
+                    d), int(H), int(M)).strftime('%Y-%m-%d %H:%M')
             else:
+                # 当年数据
                 m, d, H, M = re.findall(r'\d+', s)
                 date = datetime.datetime(today.year, int(m), int(
                     d), int(H), int(M)).strftime('%Y-%m-%d %H:%M')
@@ -179,8 +185,8 @@ def search():
     生成一个搜索实例
     '''
     keyword = '转基因'  # 搜索关键字
-    startTime = '2019-03-01'
-    endTime = '2019-04-25'
+    startTime = '2018-03-01'
+    endTime = '2018-04-25'
     # 微博默认按小时搜索, 我们可以控制时间范围增加查询精度
     timescope = f'custom:{startTime}-0:{endTime}-23'
     prov = '31'  # 省和直辖市
@@ -199,7 +205,9 @@ def main():
     totalPage = search_obj.get_totalPage(html)
 
     print(f'共有 {totalPage} 页')
-    # totalPage = 3
+
+    totalPage = 3  # 展示使用
+    print(f'只展示前 {totalPage} 页')
 
     data = []
     for i in range(1, totalPage + 1):
