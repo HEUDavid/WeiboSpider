@@ -233,7 +233,7 @@ def main():
             time.sleep(random.randint(5, 10))
         print(f'第 {i} 页抓取结束, 共 {totalPage} 页.')
     # for i in data:
-        # print(i)
+    #     print(i)
     df = pd.DataFrame(data)
     savePath = search_obj.keyword + '_' + \
         search_obj.timescope + '_' + search_obj.region + '.xlsx'
