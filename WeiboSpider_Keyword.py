@@ -3,13 +3,15 @@
 # Github: https://github.com/HEUDavid/WeiboSpider
 
 
-from CookieTest import CookieTest  # 单独定义的类
-from bs4 import BeautifulSoup
-import time
 import datetime
-import re
 import random
+import re
+import time
+
 import pandas as pd
+from bs4 import BeautifulSoup
+
+from CookieTest import CookieTest  # 单独定义的类
 
 
 class WeiboSpider:
@@ -236,7 +238,7 @@ def main():
     #     print(i)
     df = pd.DataFrame(data)
     savePath = search_obj.keyword + '_' + \
-        search_obj.timescope + '_' + search_obj.region + '.xlsx'
+        search_obj.timescope[7::] + '_' + search_obj.region[7::] + '.xlsx'
     df.to_excel(savePath)
     print(savePath, '保存成功')
 

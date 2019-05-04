@@ -2,15 +2,16 @@
 # 作者: David
 # Github: https://github.com/HEUDavid/WeiboSpider
 
-from urllib.parse import quote_plus
 import base64
-import requests
-import time
-import rsa
 import binascii
+import json
 import random
 import re
-import json
+import time
+from urllib.parse import quote_plus
+
+import requests
+import rsa
 
 
 class WeiboLogin:
@@ -195,13 +196,14 @@ class WeiboLogin:
         login_start = m_weibo_com_page.text.index('login:')
         uid_start = m_weibo_com_page.text.index('uid:')
 
-        print('移动端登录状态')
+        print('触屏版登录状态')
         print(m_weibo_com_page.text[login_start:login_start + 13:])
         print(m_weibo_com_page.text[uid_start:uid_start + 17:])
 
         # 旧版
-        weibo_cn = 'https://weibo.cn'
-        weibo_cn_page = self.Session.get(weibo_cn)
+        # weibo_cn = 'https://weibo.cn'
+        # weibo_cn_page = self.Session.get(weibo_cn)
+        # print(weibo_cn_page.text)
 
         return self.Session.cookies
 

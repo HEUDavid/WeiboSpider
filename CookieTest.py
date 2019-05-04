@@ -2,9 +2,9 @@
 # 作者: David
 # Github: https://github.com/HEUDavid/WeiboSpider
 
+import json
 
 import requests
-import json
 
 
 class CookieTest:
@@ -30,10 +30,15 @@ class CookieTest:
         return html.text.replace('\u200b', '')
 
     def is_OK(self, html):
-        # PC 版 没有问题
-        if '\'islogin\':1' in html:
+        # PC 版
+        if "CONFIG['islogin'] = '1'" in html:
             return True
-        # 触屏版 旧版 还未写 验证
+        # 触屏版
+        elif 'login: [1][0]' in html:
+            return True
+        # 旧版
+        elif '详细资料' in html:
+            return True
         else:
             return False
 
@@ -43,20 +48,12 @@ def main():
     test = CookieTest(cookie_path)
 
     url1 = 'https://m.weibo.cn/'  # 触屏版
-    url2 = 'https://weibo.cn/'  # 旧版
+    url2 = 'https://weibo.cn/'  # 旧版 还有问题
     url3 = 'https://weibo.com/'  # PC 版
     url4 = 'https://s.weibo.com/'  # PC 版 高级搜索
 
-    '''
-    经过简单的测试
-    当用 cookie 登录 url1 后 再去登录 url2 会失败
-    当用 cookie 登录 url2 后 再去登录 url1 会失败
-    当用 cookie 登录 url3 或 url4 后 再去登录 url1 或 url2 会失败
-    url3 和 url4 可以反复使用
-    url1 可以反复登录
-    url2 可以反复登录
-    '''
     html = test.get_page(url4)
+    # print(html)
     print(test.is_OK(html))
 
 
