@@ -187,8 +187,8 @@ def search():
     生成一个搜索实例
     '''
     keyword = '大卫'  # 搜索关键字
-    startTime = '2018-03-01'
-    endTime = '2019-04-25'
+    startTime = '2018-05-01'
+    endTime = '2019-05-01'
     # 微博默认按小时搜索, 我们可以控制时间范围增加查询精度
     timescope = f'custom:{startTime}-0:{endTime}-23'
     prov = '31'  # 省和直辖市
@@ -234,11 +234,12 @@ def main():
                 data.extend(results)
             time.sleep(random.randint(5, 10))
         print(f'第 {i} 页抓取结束, 共 {totalPage} 页.')
-    # for i in data:
-    #     print(i)
+    for i in data:
+        print(i)
     df = pd.DataFrame(data)
-    savePath = search_obj.keyword + '_' + \
-        search_obj.timescope[7::] + '_' + search_obj.region[7::] + '.xlsx'
+    # savePath = search_obj.keyword + '_' + \
+    #     search_obj.timescope[7::] + '_' + search_obj.region[7::] + '.xlsx'
+    savePath = search_obj.keyword + '.xlsx'
     df.to_excel(savePath)
     print(savePath, '保存成功')
 

@@ -52,7 +52,7 @@ class WeiboLogin:
         username_quote = quote_plus(self.username)
         username_base64 = base64.b64encode(username_quote.encode('utf-8'))
         su = username_base64.decode('utf-8')
-        print('处理后的账户:', su)
+        # print('处理后的账户:', su)
 
         self.Form_Data['su'] = su
 
@@ -85,7 +85,7 @@ class WeiboLogin:
         message = message.encode('utf-8')
         passwd = rsa.encrypt(message, key)  # 加密
         passwd = binascii.b2a_hex(passwd)  # 将加密信息转换为16进制
-        print('处理后的密码:', passwd)
+        # print('处理后的密码:', passwd)
 
         self.Form_Data['sp'] = passwd
 
@@ -220,7 +220,7 @@ class WeiboLogin:
         login_start = m_weibo_com_page.text.index('login:')
         uid_start = m_weibo_com_page.text.index('uid:')
 
-        print('触屏版登录状态:')
+        print('触屏版登录状态')
         print(m_weibo_com_page.text[login_start:login_start + 13:])
         print(m_weibo_com_page.text[uid_start:uid_start + 17:])
 
@@ -240,8 +240,8 @@ def save(name, data):
 
 
 def main():
-    username = '18846426742'  # 用户名
-    password = 'www.mdavid.cn'  # 密码
+    username = input('请输入账号: ')  # 用户名
+    password = input('请输入密码: ')  # 密码
     login = WeiboLogin(username, password)
     cookies = login.get_cookie()
 
