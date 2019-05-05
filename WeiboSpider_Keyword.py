@@ -186,9 +186,9 @@ def search():
     '''
     生成一个搜索实例
     '''
-    keyword = '转基因'  # 搜索关键字
+    keyword = '大卫'  # 搜索关键字
     startTime = '2018-03-01'
-    endTime = '2018-04-25'
+    endTime = '2019-04-25'
     # 微博默认按小时搜索, 我们可以控制时间范围增加查询精度
     timescope = f'custom:{startTime}-0:{endTime}-23'
     prov = '31'  # 省和直辖市
