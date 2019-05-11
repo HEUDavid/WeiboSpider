@@ -269,9 +269,7 @@ def main():
     t2.start()
     t1.join()
     t2.join()
-    data1 = t1.get_result()
-    data2 = t2.get_result()
-    data = data1 + data2
+    data = t1.get_result() + t2.get_result()
 
     endtime = time.time()  # 记录结束时间
     totaltime = endtime - starttime  # 执行耗时
