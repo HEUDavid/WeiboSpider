@@ -11,7 +11,8 @@ import time
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from CookieTest import CookieTest  # 单独定义的类
+from CookieTest import CookieTest
+from SpiderThread import SpiderThread
 
 
 class WeiboSpider:
@@ -88,6 +89,7 @@ class WeiboSpider:
 
                 except BaseException:
                     print('忽略:', i.get_text().replace('\n', '').strip())
+
             return res
 
     def get_datetime(self, s):
@@ -187,8 +189,8 @@ def search():
     生成一个搜索实例
     '''
     keyword = '大卫'  # 搜索关键字
-    startTime = '2018-05-01'
-    endTime = '2019-05-01'
+    startTime = '2018-04-01'
+    endTime = '2018-05-01'
     # 微博默认按小时搜索, 我们可以控制时间范围增加查询精度
     timescope = f'custom:{startTime}-0:{endTime}-23'
     prov = '31'  # 省和直辖市
@@ -198,21 +200,13 @@ def search():
     return search_obj
 
 
-def main():
-    search_obj = search()
-    session_obj = CookieTest('cookie_18846426742.json')  # cookie 路径
-
-    url = search_obj.get_url(1)
-    html = session_obj.get_page(url)
-    totalPage = search_obj.get_totalPage(html)
-
-    print(f'共有 {totalPage} 页')
-
-    totalPage = 3  # 展示使用
-    print(f'只展示前 {totalPage} 页')
-
+def get_data(search_obj, session_obj, start, end):
+    '''
+    爬 [start, end] 页数据
+    '''
+    print(f'抓取 {start} 到 {end} 页')
     data = []
-    for i in range(1, totalPage + 1):
+    for i in range(start, end + 1):
         print('#' * 10 + f'第 {i} 页' + '#' * 10)
         url = search_obj.get_url(i)
         try:
@@ -233,9 +227,59 @@ def main():
             if results:
                 data.extend(results)
             time.sleep(random.randint(5, 10))
-        print(f'第 {i} 页抓取结束, 共 {totalPage} 页.')
+        print(f'第 {i} 页抓取结束')
+
+    print(f'{start} 到 {end} 页抓取结束')
+
+    return data
+
+
+def main():
+    search_obj = search()
+    session_obj1 = CookieTest('cookie_18846426742.json')  # cookie 路径
+    session_obj2 = CookieTest('cookie_admin@mdavid.cn.json')
+
+    url = search_obj.get_url(1)
+    html = session_obj1.get_page(url)
+    totalPage = search_obj.get_totalPage(html)
+
+    if not totalPage:
+        print('没有内容')
+        return None
+
+    print(f'共有 {totalPage} 页')
+
+    '''
+    print('展示前 3 页')  # Demo, 展示使用
+    totalPage = 3
+    data = get_data(search_obj, session_obj1, 1, totalPage)
     for i in data:
         print(i)
+    '''
+
+    starttime = time.time()  # 记录开始时间
+
+    # 单线程
+    # data = get_data(search_obj, session_obj1, 1, 40)
+
+    # 多线程
+    t1 = SpiderThread(get_data, args=(search_obj, session_obj1, 1, 20))
+    t2 = SpiderThread(get_data, args=(search_obj, session_obj2, 21, 40))
+    t1.start()
+    t2.start()
+    t1.join()
+    t2.join()
+    data1 = t1.get_result()
+    data2 = t2.get_result()
+    data = data1 + data2
+
+    endtime = time.time()  # 记录结束时间
+    totaltime = endtime - starttime  # 执行耗时
+
+    print("耗时: {0:.5f} 秒" .format(totaltime))  # 输出耗时
+
+    # print(len(data))
+
     df = pd.DataFrame(data)
     # savePath = search_obj.keyword + '_' + \
     #     search_obj.timescope[7::] + '_' + search_obj.region[7::] + '.xlsx'

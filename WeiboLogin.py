@@ -2,6 +2,7 @@
 # 作者: David
 # Github: https://github.com/HEUDavid/WeiboSpider
 
+
 import base64
 import binascii
 import json
@@ -103,7 +104,7 @@ class WeiboLogin:
             f.write(png_page.content)
             f.close()
             print('验证码下载成功, 请到目录下查看')
-        verification_code = input('请输入验证码:')
+        verification_code = input('请输入验证码: ')
         return verification_code
 
     def get_cookie(self):
@@ -194,10 +195,9 @@ class WeiboLogin:
         s_weibo_com_page = self.Session.get(s_weibo_com)
 
         # 触屏版 m.weibo.com
-        _rand = str(time.time())
         mParams = {
             'url': 'https://m.weibo.cn/',
-            '_rand': _rand,
+            '_rand': str(time.time()),
             'gateway': '1',
             'service': 'sinawap',
             'entry': 'sinawap',
@@ -242,6 +242,7 @@ def save(name, data):
 def main():
     username = input('请输入账号: ')  # 用户名
     password = input('请输入密码: ')  # 密码
+
     login = WeiboLogin(username, password)
     cookies = login.get_cookie()
 
