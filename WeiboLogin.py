@@ -150,7 +150,8 @@ class WeiboLogin:
             else:
                 print('输入验证码登录成功, 用户昵称:', ticket_js['nick'])
 
-        print('ticket_js:', ticket_js)
+        finally:
+            print('ticket_js:', ticket_js)
 
         ticket = ticket_js['ticket']
         ssosavestate = ticket.split('-')[2]

@@ -27,7 +27,7 @@ class WeiboSpider:
         res = []
         soup = BeautifulSoup(self.html, 'html.parser')
         if len(soup.select('.card-no-result')) > 0:
-            print('没有内容')
+            print('这一页没有内容')
             return res
         else:
             for i in soup.select('div[action-type="feed_list_item"]'):
@@ -188,7 +188,7 @@ def search():
     '''
     生成一个搜索实例
     '''
-    keyword = '大卫'  # 搜索关键字
+    keyword = '刘强东'  # 搜索关键字
     startTime = '2018-04-01'
     endTime = '2018-05-01'
     # 微博默认按小时搜索, 我们可以控制时间范围增加查询精度
@@ -215,6 +215,8 @@ def get_data(search_obj, session_obj, start, end):
             results = spider.get_results()
             if results:
                 data.extend(results)
+            else:
+                print(f"\033[1;37;41m{url}\033[0m")  # 高亮打印结果为空的 url
             time.sleep(random.randint(5, 10))
         except BaseException:
             print('出错')
@@ -226,6 +228,8 @@ def get_data(search_obj, session_obj, start, end):
             results = spider.get_results()
             if results:
                 data.extend(results)
+            else:
+                print(f"\033[1;37;41m{url}\033[0m")
             time.sleep(random.randint(5, 10))
         print(f'第 {i} 页抓取结束')
 
@@ -236,8 +240,10 @@ def get_data(search_obj, session_obj, start, end):
 
 def main():
     search_obj = search()
+
     session_obj1 = CookieTest('cookie_18846426742.json')  # cookie 路径
     session_obj2 = CookieTest('cookie_admin@mdavid.cn.json')
+    session_obj3 = CookieTest('cookie_854107424@qq.com.json')
 
     url = search_obj.get_url(1)
     html = session_obj1.get_page(url)
@@ -255,21 +261,32 @@ def main():
     data = get_data(search_obj, session_obj1, 1, totalPage)
     for i in data:
         print(i)
+    return None
     '''
 
     starttime = time.time()  # 记录开始时间
 
     # 单线程
-    # data = get_data(search_obj, session_obj1, 1, 40)
+    # data = get_data(search_obj, session_obj1, 1, totalPage)
 
     # 多线程
-    t1 = SpiderThread(get_data, args=(search_obj, session_obj1, 1, 20))
-    t2 = SpiderThread(get_data, args=(search_obj, session_obj2, 21, 40))
-    t1.start()
-    t2.start()
-    t1.join()
-    t2.join()
-    data = t1.get_result() + t2.get_result()
+    if totalPage < 10:
+        data = get_data(search_obj, session_obj1, 1, totalPage)
+    else:
+        step = int(totalPage / 3)
+        t1 = SpiderThread(get_data, args=(
+            search_obj, session_obj1, 1, 1 + step))
+        t2 = SpiderThread(get_data, args=(
+            search_obj, session_obj2, 2 + step, 2 + step * 2))
+        t3 = SpiderThread(get_data, args=(
+            search_obj, session_obj3, 3 + step * 2, totalPage))
+        t1.start()
+        t2.start()
+        t3.start()
+        t1.join()
+        t2.join()
+        t3.join()
+        data = t1.get_result() + t2.get_result() + t3.get_result()
 
     endtime = time.time()  # 记录结束时间
     totaltime = endtime - starttime  # 执行耗时
