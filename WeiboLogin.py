@@ -111,6 +111,7 @@ class WeiboLogin:
         su = self.get_su()
         '''
         握草, 莫名奇妙每次登录都要输入验证码了!
+        握草, 莫名其妙每次登录又不需要输入验证码了!
         {'retcode': '4049', 'reason': '为了您的帐号安全，请输入验证码'}
         {'retcode': '2093', 'reason': '抱歉！登录失败，请稍候再试'}
         {'retcode': '0', 'ticket': 'ST-NTcwNjQxMzA3Mg==-1557049968-yf-6EE75B29C64734704473DCDD74DBC755-1', 'uid': '5706413072', 'nick': '大大大卫哥'}

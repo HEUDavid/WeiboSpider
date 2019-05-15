@@ -186,18 +186,33 @@ class Search:
 
 def search():
     '''
-    生成一个搜索实例
+    每一个时间段都生成一个搜索实例, 返回一个列表
     '''
+    search = []
     keyword = '刘强东'  # 搜索关键字
-    startTime = '2018-04-01'
-    endTime = '2018-05-01'
-    # 微博默认按小时搜索, 我们可以控制时间范围增加查询精度
-    timescope = f'custom:{startTime}-0:{endTime}-23'
     prov = '31'  # 省和直辖市
     city = '1000'  # 城市
     region = f'custom:{prov}:{city}'
-    search_obj = Search(keyword, timescope, region)
-    return search_obj
+
+    startTime = '2018-01-01-0'
+    endTime = '2019-01-01-0'
+    start_date = datetime.datetime.strptime(startTime, '%Y-%m-%d-%H')
+    end_date = datetime.datetime.strptime(endTime, '%Y-%m-%d-%H')
+
+    period_length = 100  # 时间段的长度控制查询精度
+
+    start_temp = start_date
+    end_temp = start_temp + datetime.timedelta(days=period_length)
+
+    while end_temp <= end_date:
+        startTime = start_temp.strftime('%Y-%m-%d-%H')
+        endTime = end_temp.strftime('%Y-%m-%d-%H')
+        timescope = f'custom:{startTime}:{endTime}'
+        search.append(Search(keyword, timescope, region))
+        start_temp = end_temp
+        end_temp = start_temp + datetime.timedelta(days=period_length)
+
+    return search
 
 
 def get_data(search_obj, session_obj, start, end):
@@ -207,7 +222,7 @@ def get_data(search_obj, session_obj, start, end):
     print(f'抓取 {start} 到 {end} 页')
     data = []
     for i in range(start, end + 1):
-        print('#' * 10 + f'第 {i} 页' + '#' * 10)
+        # print('#' * 10 + f'第 {i} 页' + '#' * 10)
         url = search_obj.get_url(i)
         try:
             html = session_obj.get_page(url)
@@ -216,12 +231,10 @@ def get_data(search_obj, session_obj, start, end):
             if results:
                 data.extend(results)
             else:
-                print(f"\033[1;37;41m{url}\033[0m")  # 高亮打印结果为空的 url
+                print(f'\033[0;0;31m{url}\033[0m')
             time.sleep(random.randint(5, 10))
         except BaseException:
-            print('出错')
-            print(url)
-            print('重试')
+            print('出错重试: {url}')
             time.sleep(20)
             html = session_obj.get_page(url)
             spider = WeiboSpider(html)
@@ -229,76 +242,86 @@ def get_data(search_obj, session_obj, start, end):
             if results:
                 data.extend(results)
             else:
-                print(f"\033[1;37;41m{url}\033[0m")
+                print(f'\033[0;37;41m{url}\033[0m')
             time.sleep(random.randint(5, 10))
         print(f'第 {i} 页抓取结束')
-
-    print(f'{start} 到 {end} 页抓取结束')
+    print(f'\033[0;30;47m抓取 {start} 到 {end} 页结束\033[0m')
 
     return data
 
 
 def main():
-    search_obj = search()
 
     session_obj1 = CookieTest('cookie_18846426742.json')  # cookie 路径
     session_obj2 = CookieTest('cookie_admin@mdavid.cn.json')
     session_obj3 = CookieTest('cookie_854107424@qq.com.json')
 
-    url = search_obj.get_url(1)
-    html = session_obj1.get_page(url)
-    totalPage = search_obj.get_totalPage(html)
+    html1 = session_obj1.get_page()
+    html2 = session_obj2.get_page()
+    html3 = session_obj3.get_page()
 
-    if not totalPage:
-        print('没有内容')
+    if not session_obj1.is_OK(html1):
+        print('cookie_18846426742.json 失效')
+        return None
+    if not session_obj2.is_OK(html2):
+        print('cookie_admin@mdavid.cn.json 失效')
+        return None
+    if not session_obj3.is_OK(html3):
+        print('cookie_854107424@qq.com.json 失效')
         return None
 
-    print(f'共有 {totalPage} 页')
+    searchList = search()
 
-    '''
-    print('展示前 3 页')  # Demo, 展示使用
-    totalPage = 3
-    data = get_data(search_obj, session_obj1, 1, totalPage)
-    for i in data:
-        print(i)
-    return None
-    '''
+    alldata = []  # 所有的数据
 
-    starttime = time.time()  # 记录开始时间
+    for search_obj in searchList:
 
-    # 单线程
-    # data = get_data(search_obj, session_obj1, 1, totalPage)
+        url = search_obj.get_url(1)
+        html = session_obj1.get_page(url)
+        totalPage = search_obj.get_totalPage(html)
+        if not totalPage:
+            print(f'\033[0;0;43m{search_obj.timescope[7:]} 没有微博\033[0m')
+            continue
+        print(
+            f'\033[0;0;33m{search_obj.timescope[7:]} 共有 {totalPage} 页\033[0m')
 
-    # 多线程
-    if totalPage < 10:
-        data = get_data(search_obj, session_obj1, 1, totalPage)
-    else:
-        step = int(totalPage / 3)
-        t1 = SpiderThread(get_data, args=(
-            search_obj, session_obj1, 1, 1 + step))
-        t2 = SpiderThread(get_data, args=(
-            search_obj, session_obj2, 2 + step, 2 + step * 2))
-        t3 = SpiderThread(get_data, args=(
-            search_obj, session_obj3, 3 + step * 2, totalPage))
-        t1.start()
-        t2.start()
-        t3.start()
-        t1.join()
-        t2.join()
-        t3.join()
-        data = t1.get_result() + t2.get_result() + t3.get_result()
+        starttime = time.time()
 
-    endtime = time.time()  # 记录结束时间
-    totaltime = endtime - starttime  # 执行耗时
+        # 单线程
+        # data = get_data(search_obj, session_obj1, 1, totalPage)
 
-    print("耗时: {0:.5f} 秒" .format(totaltime))  # 输出耗时
+        # 多线程
+        if totalPage < 10:
+            data = get_data(search_obj, session_obj1, 1, totalPage)
+        else:
+            # totalPage = 12  # demo 展示
+            step = int(totalPage / 3)
+            t1 = SpiderThread(get_data, args=(
+                search_obj, session_obj1, 1, 1 + step))
+            t2 = SpiderThread(get_data, args=(
+                search_obj, session_obj2, 2 + step, 2 + step * 2))
+            t3 = SpiderThread(get_data, args=(
+                search_obj, session_obj3, 3 + step * 2, totalPage))
+            t1.start()
+            t2.start()
+            t3.start()
+            t1.join()
+            t2.join()
+            t3.join()
+            data = t1.get_result() + t2.get_result() + t3.get_result()
 
-    # print(len(data))
+        endtime = time.time()
+        totaltime = endtime - starttime  # 一个时间段内, 爬虫执行耗时
+        print(f'\033[0;0;32m采集到 {len(data)} 条微博, \033[0m',
+              '耗时: {0:.5f} 秒'.format(totaltime))
 
-    df = pd.DataFrame(data)
+        alldata.extend(data)
+
+    print(f'\033[1;0;31m共采集 {len(alldata)} 条微博\033[0m')
+    df = pd.DataFrame(alldata)
     # savePath = search_obj.keyword + '_' + \
     #     search_obj.timescope[7::] + '_' + search_obj.region[7::] + '.xlsx'
-    savePath = search_obj.keyword + '.xlsx'
+    savePath = searchList[0].keyword + '.xlsx'
     df.to_excel(savePath)
     print(savePath, '保存成功')
 
