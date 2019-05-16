@@ -37,13 +37,11 @@ class WeiboSpider:
                     blog['博主主页'] = 'https:' + i.select('.name')[0].get('href')
 
                     weibotext = ''
-                    if i.select(
-                            'div[class="content"] p[node-type="feed_list_content_full"]'):
+                    if i.select('div[class="content"] p[node-type="feed_list_content_full"]'):
                         weibotext = i.select('div[class="content"] p[node-type="feed_list_content_full"]')[
                             0].text.replace('收起全文d', '').strip()
                     if weibotext == '':
-                        if i.select(
-                                'div[class="content"] p[node-type="feed_list_content"]'):
+                        if i.select('div[class="content"] p[node-type="feed_list_content"]'):
                             weibotext = i.select(
                                 'div[class="content"] p[node-type="feed_list_content"]')[0].text.strip()
                     blog['微博内容'] = weibotext
@@ -123,13 +121,21 @@ class WeiboSpider:
                     today.minute).strftime('%Y-%m-%d %H:%M')
             elif '年' in s:
                 y, m, d, H, M = re.findall(r'\d+', s)
-                date = datetime.datetime(int(y), int(m), int(
-                    d), int(H), int(M)).strftime('%Y-%m-%d %H:%M')
+                date = datetime.datetime(
+                    int(y),
+                    int(m),
+                    int(d),
+                    int(H),
+                    int(M)).strftime('%Y-%m-%d %H:%M')
             else:
                 # 当年数据
                 m, d, H, M = re.findall(r'\d+', s)
-                date = datetime.datetime(today.year, int(m), int(
-                    d), int(H), int(M)).strftime('%Y-%m-%d %H:%M')
+                date = datetime.datetime(
+                    today.year,
+                    int(m),
+                    int(d),
+                    int(H),
+                    int(M)).strftime('%Y-%m-%d %H:%M')
         except BaseException:
             print('时间格式异常', s)
             date = s
@@ -149,14 +155,7 @@ class Search:
     page: 2
     '''
 
-    def __init__(
-            self,
-            keyword,
-            timescope,
-            region,
-            type='scope=ori',
-            include='suball=1'):
-
+    def __init__(self, keyword, timescope, region, type='scope=ori', include='suball=1'):
         self.keyword = keyword
         self.timescope = timescope
         self.region = region  # 地点 省 市
@@ -189,9 +188,9 @@ def search():
     每一个时间段都生成一个搜索实例, 返回一个列表
     '''
     search = []
-    keyword = '刘强东'  # 搜索关键字
-    prov = '31'  # 省和直辖市
-    city = '1000'  # 城市
+    keyword = '华为'  # 搜索关键字
+    prov = '0'  # 省市代码见图片 prov.png
+    city = '1000'  # 不限城市
     region = f'custom:{prov}:{city}'
 
     startTime = '2018-01-01-0'
@@ -234,7 +233,7 @@ def get_data(search_obj, session_obj, start, end):
                 print(f'\033[0;0;31m{url}\033[0m')
             time.sleep(random.randint(5, 10))
         except BaseException:
-            print('出错重试: {url}')
+            print(f'出错重试: {url}')
             time.sleep(20)
             html = session_obj.get_page(url)
             spider = WeiboSpider(html)
@@ -272,7 +271,8 @@ def main():
 
     searchList = search()
 
-    alldata = []  # 所有的数据
+    count = 0
+    savePath = searchList[0].keyword + '.csv'
 
     for search_obj in searchList:
 
@@ -282,8 +282,7 @@ def main():
         if not totalPage:
             print(f'\033[0;0;43m{search_obj.timescope[7:]} 没有微博\033[0m')
             continue
-        print(
-            f'\033[0;0;33m{search_obj.timescope[7:]} 共有 {totalPage} 页\033[0m')
+        print(f'\033[0;0;33m{search_obj.timescope[7:]} 有 {totalPage} 页\033[0m')
 
         starttime = time.time()
 
@@ -294,7 +293,7 @@ def main():
         if totalPage < 10:
             data = get_data(search_obj, session_obj1, 1, totalPage)
         else:
-            # totalPage = 12  # demo 展示
+            totalPage = 12  # demo 展示
             step = int(totalPage / 3)
             t1 = SpiderThread(get_data, args=(
                 search_obj, session_obj1, 1, 1 + step))
@@ -312,17 +311,16 @@ def main():
 
         endtime = time.time()
         totaltime = endtime - starttime  # 一个时间段内, 爬虫执行耗时
-        print(f'\033[0;0;32m采集到 {len(data)} 条微博, \033[0m',
+        print(f'\033[0;0;32m采集到 {len(data)} 条微博,\033[0m',
               '耗时: {0:.5f} 秒'.format(totaltime))
 
-        alldata.extend(data)
+        count += len(data)
+        df = pd.DataFrame(data)
+        df.to_csv(savePath, mode='a', header=None, index=None)  # 追加模式
+        # header: 博主主页,博主昵称,发布时间,微博内容,微博地址,微博来源,评论,赞,转发
 
-    print(f'\033[1;0;31m共采集 {len(alldata)} 条微博\033[0m')
-    df = pd.DataFrame(alldata)
-    # savePath = search_obj.keyword + '_' + \
-    #     search_obj.timescope[7::] + '_' + search_obj.region[7::] + '.xlsx'
-    savePath = searchList[0].keyword + '.xlsx'
-    df.to_excel(savePath)
+    print(f'\033[1;0;31m共采集 {count} 条微博\033[0m')
+
     print(savePath, '保存成功')
 
 

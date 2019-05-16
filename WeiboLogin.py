@@ -96,9 +96,8 @@ class WeiboLogin:
         '''
         获取验证码, 如何识别验证码? 
         '''
-        url = 'https://login.sina.com.cn/cgi/pin.php?r='
-        png_url = url + str(int(random.random() * 100000000)
-                            ) + '&s=0&p=' + pcid
+        png_url = 'https://login.sina.com.cn/cgi/pin.php?r=' + \
+            str(int(random.random() * 100000000)) + '&s=0&p=' + pcid
         png_page = self.Session.get(png_url)
         with open('pin.png', 'wb') as f:
             f.write(png_page.content)

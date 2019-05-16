@@ -11,7 +11,7 @@
 > * https://weibo.com/  # PC 版
 > * https://s.weibo.com/  # PC 版 高级搜索
 
-### 基于 BeautifulSoup 实现内容采集, 通过 pandas 保存 excel 到本地.
+### 基于 BeautifulSoup 实现内容采集, 通过 pandas 保存 csv 文件到本地.
 
 ![WeiboSpider_Keyword.png](https://github.com/HEUDavid/WeiboSpider/blob/master/pictures/WeiboSpider_Keyword.png)
 
