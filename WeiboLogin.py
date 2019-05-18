@@ -234,7 +234,7 @@ class WeiboLogin:
 
 
 def save(name, data):
-    path = name + '.json'
+    path = './cookies/' + name + '.json'
     with open(path, 'w+') as f:
         json.dump(data, f)
         print(path, '保存成功')

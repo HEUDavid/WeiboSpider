@@ -45,7 +45,7 @@ class CookieTest:
 
 
 def main():
-    cookie_path = 'cookie_18846426742.json'
+    cookie_path = './cookies/' + 'cookie_965019007@qq.com.json'
     test = CookieTest(cookie_path)
 
     url1 = 'https://m.weibo.cn/'  # 触屏版

@@ -177,8 +177,10 @@ class Search:
         soup = BeautifulSoup(html, 'html.parser')
         if len(soup.select('.card-no-result')) > 0:
             totalpage = 0
-        else:
+        elif soup.select('.s-scroll li'):
             totalpage = len(soup.select('.s-scroll li'))
+        else:
+            totalpage = 1  # 没有翻页, 只有一页
         self.totalPage = totalpage
         return totalpage
 
@@ -251,13 +253,15 @@ def get_data(search_obj, session_obj, start, end):
 
 def main():
 
-    session_obj1 = CookieTest('cookie_18846426742.json')  # cookie 路径
-    session_obj2 = CookieTest('cookie_admin@mdavid.cn.json')
-    session_obj3 = CookieTest('cookie_854107424@qq.com.json')
+    session_obj1 = CookieTest('./cookies/cookie_18846426742.json')  # cookie 路径
+    session_obj2 = CookieTest('./cookies/cookie_admin@mdavid.cn.json')
+    session_obj3 = CookieTest('./cookies/cookie_854107424@qq.com.json')
+    session_obj4 = CookieTest('./cookies/cookie_965019007@qq.com.json')
 
     html1 = session_obj1.get_page()
     html2 = session_obj2.get_page()
     html3 = session_obj3.get_page()
+    html4 = session_obj4.get_page()
 
     if not session_obj1.is_OK(html1):
         print('cookie_18846426742.json 失效')
@@ -268,8 +272,11 @@ def main():
     if not session_obj3.is_OK(html3):
         print('cookie_854107424@qq.com.json 失效')
         return None
+    if not session_obj4.is_OK(html4):
+        print('cookie_965019007@qq.com.json 失效')
+        return None
 
-    searchList = search()
+    searchList = search()  # 就是时间范围不一样
 
     count = 0
     savePath = searchList[0].keyword + '.csv'
@@ -279,7 +286,7 @@ def main():
         url = search_obj.get_url(1)
         html = session_obj1.get_page(url)
         totalPage = search_obj.get_totalPage(html)
-        if not totalPage:
+        if totalPage == 0:
             print(f'\033[0;0;43m{search_obj.timescope[7:]} 没有微博\033[0m')
             continue
         print(f'\033[0;0;33m{search_obj.timescope[7:]} 有 {totalPage} 页\033[0m')
@@ -290,24 +297,28 @@ def main():
         # data = get_data(search_obj, session_obj1, 1, totalPage)
 
         # 多线程
-        if totalPage < 10:
+        if totalPage < 12.5:
             data = get_data(search_obj, session_obj1, 1, totalPage)
         else:
-            totalPage = 12  # demo 展示
-            step = int(totalPage / 3)
+            totalPage = 15  # demo 展示
+            step = int(totalPage / 4)
             t1 = SpiderThread(get_data, args=(
                 search_obj, session_obj1, 1, 1 + step))
             t2 = SpiderThread(get_data, args=(
                 search_obj, session_obj2, 2 + step, 2 + step * 2))
             t3 = SpiderThread(get_data, args=(
-                search_obj, session_obj3, 3 + step * 2, totalPage))
+                search_obj, session_obj3, 3 + step * 2, 3 + step * 3))
+            t4 = SpiderThread(get_data, args=(
+                search_obj, session_obj4, 4 + step * 3, totalPage))
             t1.start()
             t2.start()
             t3.start()
+            t4.start()
             t1.join()
             t2.join()
             t3.join()
-            data = t1.get_result() + t2.get_result() + t3.get_result()
+            t4.join()
+            data = t1.get_result() + t2.get_result() + t3.get_result() + t4.get_result()
 
         endtime = time.time()
         totaltime = endtime - starttime  # 一个时间段内, 爬虫执行耗时
@@ -315,6 +326,7 @@ def main():
               '耗时: {0:.5f} 秒'.format(totaltime))
 
         count += len(data)
+
         df = pd.DataFrame(data)
         df.to_csv(savePath, mode='a', header=None, index=None)  # 追加模式
         # header: 博主主页,博主昵称,发布时间,微博内容,微博地址,微博来源,评论,赞,转发
