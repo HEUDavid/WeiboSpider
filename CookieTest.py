@@ -35,11 +35,14 @@ class CookieTest:
                 # ConnectionResetError: [Errno 104] Connection reset by peer
                 time.sleep(10)
             except Exception as e:
-                print('\n' * 2, e, '\n' * 2)
+                print('\n' * 2)
+                print(e)
+                print('\n' * 2)
                 time.sleep(10)
             else:
                 break
         else:
+            print(url)
             print('重试解决不了问题')
             return None
 
