@@ -200,7 +200,7 @@ def search():
     start_date = datetime.datetime.strptime(startTime, '%Y-%m-%d-%H')
     end_date = datetime.datetime.strptime(endTime, '%Y-%m-%d-%H')
 
-    period_length = 100  # 时间段的长度控制查询精度
+    period_length = 5  # 时间段的长度控制查询精度
 
     start_temp = start_date
     end_temp = start_temp + datetime.timedelta(days=period_length)
@@ -279,7 +279,7 @@ def main():
     searchList = search()  # 就是时间范围不一样
 
     count = 0
-    savePath = searchList[0].keyword + '.csv'
+    savePath = './data/' + searchList[0].keyword + '.csv'
 
     for search_obj in searchList:
 
@@ -300,7 +300,7 @@ def main():
         if totalPage < 12.5:
             data = get_data(search_obj, session_obj1, 1, totalPage)
         else:
-            totalPage = 15  # demo 展示
+            # totalPage = 15  # demo 展示
             step = int(totalPage / 4)
             t1 = SpiderThread(get_data, args=(
                 search_obj, session_obj1, 1, 1 + step))
