@@ -236,7 +236,7 @@ def get_data(search_obj, session_obj, start, end):
             time.sleep(random.randint(5, 10))
         except BaseException:
             print(f'出错重试: {url}')
-            time.sleep(20)
+            time.sleep(10)
             html = session_obj.get_page(url)
             spider = WeiboSpider(html)
             results = spider.get_results()

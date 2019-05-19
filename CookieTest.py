@@ -2,8 +2,8 @@
 # 作者: David
 # Github: https://github.com/HEUDavid/WeiboSpider
 
-
 import json
+import time
 
 import requests
 
@@ -27,7 +27,22 @@ class CookieTest:
             return None
 
     def get_page(self, url='https://s.weibo.com/'):
-        html = self.Session.get(url)
+
+        for i in range(5):
+            try:
+                html = self.Session.get(url)
+            except ConnectionResetError:
+                # ConnectionResetError: [Errno 104] Connection reset by peer
+                time.sleep(10)
+            except Exception as e:
+                print('\n' * 2, e, '\n' * 2)
+                time.sleep(10)
+            else:
+                break
+        else:
+            print('重试解决不了问题')
+            return None
+
         return html.text.replace('\u200b', '')
 
     def is_OK(self, html):
