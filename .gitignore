@@ -5,3 +5,5 @@
 !/LICENSE
 !/README.md
 !/*.py
+!/cookies/
+!/data/
