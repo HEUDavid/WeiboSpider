@@ -260,12 +260,14 @@ def main(username, password):
 
 
 def login():
+    # 账号列表
     accounts = [
-        ['username', 'password'],
-        ['username', 'password'],
-        ['username', 'password'],
-        ['username', 'password']
+        ['854107424@qq.com', '密码'],
+        ['965019007@qq.com', '密码'],
+        ['18846426742', '密码'],
+        ['admin@mdavid.cn', '密码']
     ]
+
     for account in accounts:
         main(account[0], account[1])
 
