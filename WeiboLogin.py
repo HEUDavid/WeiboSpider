@@ -115,43 +115,47 @@ class WeiboLogin:
         {'retcode': '2093', 'reason': '抱歉！登录失败，请稍候再试'}
         {'retcode': '0', 'ticket': 'ST-NTcwNjQxMzA3Mg==-1557049968-yf-6EE75B29C64734704473DCDD74DBC755-1', 'uid': '5706413072', 'nick': '大大大卫哥'}
         '''
-        try:
-            # 不输入验证码
-            server_data = self.get_server_data(su)
-            self.get_password(
-                server_data['servertime'],
-                server_data['nonce'],
-                server_data['pubkey'])
-            login_url = 'https://login.sina.com.cn/sso/login.php?client=ssologin.js(v1.4.19)&_' + str(
-                time.time() * 1000)
+        for i in range(5):
+            try:
+                # 不输入验证码
+                server_data = self.get_server_data(su)
+                self.get_password(
+                    server_data['servertime'],
+                    server_data['nonce'],
+                    server_data['pubkey'])
+                login_url = 'https://login.sina.com.cn/sso/login.php?client=ssologin.js(v1.4.19)&_' + str(
+                    time.time() * 1000)
 
-            login_page = self.Session.post(login_url, data=self.Form_Data)
-            ticket_js = login_page.json()
-            print('不输入验证码登录成功, 用户昵称:', ticket_js['nick'])
+                login_page = self.Session.post(login_url, data=self.Form_Data)
+                ticket_js = login_page.json()
+                print('不输入验证码登录成功, 用户昵称:', ticket_js['nick'])
+                break
 
-        except BaseException:
-            # 输入验证码
-            server_data = self.get_server_data(su)  # 刷新
-            self.get_password(
-                server_data['servertime'],
-                server_data['nonce'],
-                server_data['pubkey'])
-            login_url = 'https://login.sina.com.cn/sso/login.php?client=ssologin.js(v1.4.19)&_' + str(
-                time.time() * 1000)
+            except BaseException:
+                # 输入验证码
+                server_data = self.get_server_data(su)  # 刷新
+                self.get_password(
+                    server_data['servertime'],
+                    server_data['nonce'],
+                    server_data['pubkey'])
+                login_url = 'https://login.sina.com.cn/sso/login.php?client=ssologin.js(v1.4.19)&_' + str(
+                    time.time() * 1000)
 
-            self.Form_Data['door'] = self.get_png(server_data['pcid'])
+                self.Form_Data['door'] = self.get_png(server_data['pcid'])
 
-            login_page = self.Session.post(login_url, data=self.Form_Data)
-            ticket_js = login_page.json()
+                login_page = self.Session.post(login_url, data=self.Form_Data)
+                ticket_js = login_page.json()
 
-            if ticket_js['retcode'] != '0':
-                print(ticket_js['reason'])
-                return None
-            else:
-                print('输入验证码登录成功, 用户昵称:', ticket_js['nick'])
+                if ticket_js['retcode'] != '0':
+                    print(ticket_js['reason'])
+                    # return None
 
-        finally:
-            print('ticket_js:', ticket_js)
+                else:
+                    print('输入验证码登录成功, 用户昵称:', ticket_js['nick'])
+                    break
+
+        else:
+            return None
 
         ticket = ticket_js['ticket']
         ssosavestate = ticket.split('-')[2]
@@ -240,10 +244,12 @@ def save(name, data):
         print(path, '保存成功')
 
 
-def main():
-    username = input('请输入账号: ')  # 用户名
-    password = input('请输入密码: ')  # 密码
+def main(username, password):
+    # username = input('请输入账号: ')  # 用户名
+    # password = input('请输入密码: ')  # 密码
 
+    username = username
+    password = password
     login = WeiboLogin(username, password)
     cookies = login.get_cookie()
 
@@ -253,4 +259,15 @@ def main():
         save(cookie_name, data)
 
 
-main()
+def login():
+    accounts = [
+        ['username', 'password'],
+        ['username', 'password'],
+        ['username', 'password'],
+        ['username', 'password']
+    ]
+    for account in accounts:
+        main(account[0], account[1])
+
+
+login()

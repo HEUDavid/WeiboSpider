@@ -233,7 +233,7 @@ def get_data(search_obj, session_obj, start, end):
                 data.extend(results)
             else:
                 print(f'\033[0;0;31m{url}\033[0m')
-            time.sleep(random.randint(5, 10))
+            time.sleep(random.randint(1, 5))
         except BaseException:
             print(f'出错重试: {url}')
             time.sleep(10)
@@ -244,7 +244,7 @@ def get_data(search_obj, session_obj, start, end):
                 data.extend(results)
             else:
                 print(f'\033[0;37;41m{url}\033[0m')
-            time.sleep(random.randint(5, 10))
+            time.sleep(random.randint(1, 5))
         print(f'第 {i} 页抓取结束')
     print(f'\033[0;30;47m抓取 {start} 到 {end} 页结束\033[0m')
 
