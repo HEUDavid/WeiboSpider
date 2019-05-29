@@ -37,13 +37,30 @@ class WeiboSpider:
                     blog['博主主页'] = 'https:' + i.select('.name')[0].get('href')
 
                     weibotext = ''
+                    # if i.select('div[class="content"] p[node-type="feed_list_content_full"]'):
+                    #     weibotext = i.select('div[class="content"] p[node-type="feed_list_content_full"]')[
+                    #         0].text.replace('收起全文d', '').strip()
+                    # if weibotext == '':
+                    #     if i.select('div[class="content"] p[node-type="feed_list_content"]'):
+                    #         weibotext = i.select(
+                    #             'div[class="content"] p[node-type="feed_list_content"]')[0].text.strip()
                     if i.select('div[class="content"] p[node-type="feed_list_content_full"]'):
-                        weibotext = i.select('div[class="content"] p[node-type="feed_list_content_full"]')[
-                            0].text.replace('收起全文d', '').strip()
+                        content = i.select(
+                            'div[class="content"] p[node-type="feed_list_content_full"]')[0]
+                        for item in content:
+                            if item.name == 'img' and item.attrs['class'] == ['face']:
+                                weibotext += item.attrs['title']  # 微博表情
+                            elif item.string:
+                                weibotext += item.string.strip()
                     if weibotext == '':
                         if i.select('div[class="content"] p[node-type="feed_list_content"]'):
-                            weibotext = i.select(
-                                'div[class="content"] p[node-type="feed_list_content"]')[0].text.strip()
+                            content = i.select(
+                                'div[class="content"] p[node-type="feed_list_content"]')[0]
+                            for item in content:
+                                if item.name == 'img' and item.attrs['class'] == ['face']:
+                                    weibotext += item.attrs['title']  # 微博表情
+                                elif item.string:
+                                    weibotext += item.string.strip()
                     blog['微博内容'] = weibotext
 
                     blog['发布时间'] = self.get_datetime(
@@ -190,17 +207,17 @@ def search():
     每一个时间段都生成一个搜索实例, 返回一个列表
     '''
     search = []
-    keyword = '华为'  # 搜索关键字
+    keyword = '垃圾小米'  # 搜索关键字
     prov = '0'  # 省市代码见图片 prov.png
     city = '1000'  # 不限城市
     region = f'custom:{prov}:{city}'
 
-    startTime = '2018-01-01-0'
+    startTime = '2016-01-01-0'
     endTime = '2019-01-01-0'
     start_date = datetime.datetime.strptime(startTime, '%Y-%m-%d-%H')
     end_date = datetime.datetime.strptime(endTime, '%Y-%m-%d-%H')
 
-    period_length = 5  # 时间段的长度控制查询精度
+    period_length = 120  # 时间段的长度控制查询精度
 
     start_temp = start_date
     end_temp = start_temp + datetime.timedelta(days=period_length)
@@ -233,10 +250,10 @@ def get_data(search_obj, session_obj, start, end):
                 data.extend(results)
             else:
                 print(f'\033[0;0;31m{url}\033[0m')
-            time.sleep(random.randint(1, 5))
+            time.sleep(random.randint(1, 3))
         except BaseException:
             print(f'出错重试: {url}')
-            time.sleep(10)
+            time.sleep(5)
             html = session_obj.get_page(url)
             spider = WeiboSpider(html)
             results = spider.get_results()
@@ -244,7 +261,7 @@ def get_data(search_obj, session_obj, start, end):
                 data.extend(results)
             else:
                 print(f'\033[0;37;41m{url}\033[0m')
-            time.sleep(random.randint(1, 5))
+            time.sleep(random.randint(1, 3))
         print(f'第 {i} 页抓取结束')
     print(f'\033[0;30;47m抓取 {start} 到 {end} 页结束\033[0m')
 
@@ -300,7 +317,7 @@ def main():
         if totalPage < 12.5:
             data = get_data(search_obj, session_obj1, 1, totalPage)
         else:
-            # totalPage = 15  # demo 展示
+            # totalPage = 20  # demo 展示
             step = int(totalPage / 4)
             t1 = SpiderThread(get_data, args=(
                 search_obj, session_obj1, 1, 1 + step))

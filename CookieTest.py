@@ -33,12 +33,12 @@ class CookieTest:
                 html = self.Session.get(url, timeout=(5, 25))  # 连接超时 读取超时
             except ConnectionResetError:
                 # ConnectionResetError: [Errno 104] Connection reset by peer
-                time.sleep(10)
+                time.sleep(5)
             except Exception as e:
                 print('\n' * 2)
                 print(e)
                 print('\n' * 2)
-                time.sleep(10)
+                time.sleep(5)
             else:
                 break
         else:
