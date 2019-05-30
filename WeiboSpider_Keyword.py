@@ -52,7 +52,7 @@ class WeiboSpider:
                                 weibotext += item.attrs['title']  # 微博表情
                             elif item.string:
                                 weibotext += item.string.strip()
-                    if weibotext == '':
+                    if not weibotext:
                         if i.select('div[class="content"] p[node-type="feed_list_content"]'):
                             content = i.select(
                                 'div[class="content"] p[node-type="feed_list_content"]')[0]
@@ -61,7 +61,11 @@ class WeiboSpider:
                                     weibotext += item.attrs['title']  # 微博表情
                                 elif item.string:
                                     weibotext += item.string.strip()
-                    blog['微博内容'] = weibotext
+                    if weibotext:
+                        blog['微博内容'] = weibotext.replace('\r', '')
+                    else:
+                        print('微博内容为空')
+                        continue
 
                     blog['发布时间'] = self.get_datetime(
                         i.select('div[class="content"] p[class="from"] a')[0].get_text().strip())
@@ -207,17 +211,17 @@ def search():
     每一个时间段都生成一个搜索实例, 返回一个列表
     '''
     search = []
-    keyword = '垃圾小米'  # 搜索关键字
+    keyword = '华为'  # 搜索关键字
     prov = '0'  # 省市代码见图片 prov.png
     city = '1000'  # 不限城市
     region = f'custom:{prov}:{city}'
 
-    startTime = '2016-01-01-0'
+    startTime = '2018-01-01-0'
     endTime = '2019-01-01-0'
     start_date = datetime.datetime.strptime(startTime, '%Y-%m-%d-%H')
     end_date = datetime.datetime.strptime(endTime, '%Y-%m-%d-%H')
 
-    period_length = 120  # 时间段的长度控制查询精度
+    period_length = 5  # 时间段的长度控制查询精度
 
     start_temp = start_date
     end_temp = start_temp + datetime.timedelta(days=period_length)
@@ -296,6 +300,7 @@ def main():
     searchList = search()  # 就是时间范围不一样
 
     count = 0
+
     savePath = './data/' + searchList[0].keyword + '.csv'
 
     for search_obj in searchList:
