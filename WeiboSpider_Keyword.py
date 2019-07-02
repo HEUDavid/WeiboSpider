@@ -20,6 +20,17 @@ class WeiboSpider:
     def __init__(self, html):
         self.html = html
 
+    def get_user_config(self, url):
+        path = './cookies/cookie_965019007@qq.com.json'
+        session_obj = CookieTest(path)
+        user_home = session_obj.get_page(url)
+
+        s = user_home.index("CONFIG['domain']")  # 所有用户信息待完善
+        user_domain = int(user_home[s+18:s+24:])
+
+        return user_domain
+        # return CONFIG
+
     def get_results(self):
         '''
         将每一页的内容抽取出来
@@ -35,6 +46,19 @@ class WeiboSpider:
                     blog = {}
                     blog['博主昵称'] = i.select('.name')[0].get('nick-name')
                     blog['博主主页'] = 'https:' + i.select('.name')[0].get('href')
+
+                    '''
+                    判断用户属性
+                    '''
+                    user_domain = self.get_user_config(blog['博主主页'])
+                    if user_domain == 100505:
+                        # print('个人')
+                        blog['用户属性'] = '1'
+                    elif user_domain == 100106:
+                        # print('政府')
+                        blog['用户属性'] = '2'
+                    else:
+                        blog['用户属性'] = '3'
 
                     weibotext = ''
                     # if i.select('div[class="content"] p[node-type="feed_list_content_full"]'):
@@ -64,7 +88,7 @@ class WeiboSpider:
                     if weibotext:
                         blog['微博内容'] = weibotext.replace('\r', '')
                     else:
-                        print('微博内容为空')
+                        # print('这一条微博没有内容')
                         continue
 
                     blog['发布时间'] = self.get_datetime(
@@ -211,7 +235,7 @@ def search():
     每一个时间段都生成一个搜索实例, 返回一个列表
     '''
     search = []
-    keyword = '华为'  # 搜索关键字
+    keyword = '刘强东'  # 搜索关键字
     prov = '0'  # 省市代码见图片 prov.png
     city = '1000'  # 不限城市
     region = f'custom:{prov}:{city}'
@@ -221,7 +245,7 @@ def search():
     start_date = datetime.datetime.strptime(startTime, '%Y-%m-%d-%H')
     end_date = datetime.datetime.strptime(endTime, '%Y-%m-%d-%H')
 
-    period_length = 5  # 时间段的长度控制查询精度
+    period_length = 200  # 时间段的长度控制查询精度
 
     start_temp = start_date
     end_temp = start_temp + datetime.timedelta(days=period_length)
@@ -322,7 +346,7 @@ def main():
         if totalPage < 12.5:
             data = get_data(search_obj, session_obj1, 1, totalPage)
         else:
-            # totalPage = 20  # demo 展示
+            totalPage = 20  # demo 展示
             step = int(totalPage / 4)
             t1 = SpiderThread(get_data, args=(
                 search_obj, session_obj1, 1, 1 + step))
@@ -358,4 +382,8 @@ def main():
     print(savePath, '保存成功')
 
 
+time1 = time.time()
 main()
+time2 = time.time()
+all_time = time2 - time1
+print('耗时: {0:.2f} 秒'.format(all_time))

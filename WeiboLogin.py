@@ -262,10 +262,10 @@ def main(username, password):
 def login():
     # 账号列表
     accounts = [
-        ['854107424@qq.com', '密码'],
-        ['965019007@qq.com', '密码'],
-        ['18846426742', '密码'],
-        ['admin@mdavid.cn', '密码']
+        ['854107424@qq.com', 'passwd'],
+        ['965019007@qq.com', 'passwd'],
+        ['18846426742', 'passwd'],
+        ['admin@mdavid.cn', 'passwd']
     ]
 
     for account in accounts:
